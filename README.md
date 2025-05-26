@@ -34,14 +34,14 @@ Este prototipo simula las funciones esenciales de una agencia, tales como:
 
 ## 👥 Integrantes del equipo desarrollador
 
-| Nombre     | Apellido   | DNI       |
-|------------|------------|-----------|
-| Santiago   | Fernández  | 12345678  |
-| Camila     | Ramírez    | 23456789  |
-| Tomás      | Herrera    | 34567890  |
-| Valentina  | Sosa       | 45678901  |
-| Nicolás    | Rivas      | 56789012  |
-| Lucía      | Gómez      | 67890123  |
+| Nombre                | Apellido               | DNI       |
+|-----------------------|------------------------|-----------|
+| Fabricio Andres       | Cocconi                | 46708260  |
+| Gabriel               | Yoles Trucco           | 39935283  |
+| Melina Belén          | Rico                   | 46707711  |
+| Sofía Yasmín          | Hernandez              | 44078511  |
+| Marta Alejandra       | Moretti Orlandi        | 25585612  |
+
 
 ---
 
