@@ -69,15 +69,6 @@ Este prototipo simula las funciones esenciales de una agencia, tales como:
 
 ---
 
-## 🖼️ Diagrama Entidad-Relación (ER)
-
-
-```markdown
-![Diagrama ER del Sistema](C:\Users\Usuario\Desktop\ABP ciencias de datos\SkyRoute\SkyRoute\base de datos\Diagrama DER.jpg
-```
-
----
-
 ## 📌 Estado del Proyecto
 
 - 🧪 Prototipo inicial completo por consola.  
