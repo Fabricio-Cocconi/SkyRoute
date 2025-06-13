@@ -1,0 +1,138 @@
+DROP DATABASE IF EXISTS skyroute;
+CREATE DATABASE skyroute;
+USE skyroute;
+
+-- Tabla: Pais
+CREATE TABLE pais (
+    id_pais INT AUTO_INCREMENT PRIMARY KEY,
+    descripcion VARCHAR(100) NOT NULL
+);
+
+-- Tabla: Ciudad
+CREATE TABLE ciudad (
+    id_ciudad INT AUTO_INCREMENT PRIMARY KEY,
+    descripcion VARCHAR(100) NOT NULL,
+    id_pais INT NOT NULL,
+    FOREIGN KEY (id_pais) REFERENCES pais(id_pais)
+);
+
+-- Tabla: Contacto
+CREATE TABLE contacto (
+    id_contacto INT AUTO_INCREMENT PRIMARY KEY,
+    telefono VARCHAR(20),
+    correo VARCHAR(100)
+);
+
+-- Tabla: Cliente
+CREATE TABLE cliente (
+    id_cliente INT AUTO_INCREMENT PRIMARY KEY,
+    razon_social VARCHAR(100) NOT NULL,
+    cuit VARCHAR(20) NOT NULL UNIQUE,
+    id_contacto INT,
+    FOREIGN KEY (id_contacto) REFERENCES contacto(id_contacto)
+);
+
+-- Tabla: Destino
+CREATE TABLE destino (
+    id_destino INT AUTO_INCREMENT PRIMARY KEY,
+    id_ciudad INT NOT NULL,
+    costo DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (id_ciudad) REFERENCES ciudad(id_ciudad)
+);
+
+-- Tabla: Venta
+CREATE TABLE venta (
+    id_venta INT AUTO_INCREMENT PRIMARY KEY,
+    id_cliente INT NOT NULL,
+    id_destino INT NOT NULL,
+    fecha DATE NOT NULL,
+    cant_dias INT DEFAULT 1,
+    estado ENUM('Activa', 'Anulada') DEFAULT 'Activa',
+    fecha_anulacion DATETIME,
+    arrepent BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente),
+    FOREIGN KEY (id_destino) REFERENCES destino(id_destino)
+    );
+    
+    -- ===============================
+-- DML: INSERTAR DATOS DE EJEMPLO
+-- ===============================
+
+-- Insertar clientes
+INSERT INTO clientes (razon_social, cuit, correo) VALUES
+('Transporte SA', '20-12345678-9', 'contacto@transporte.com'),
+('Viajes Express', '23-87654321-0', 'info@viajesexpress.com'),
+('Turismo Global', '27-11223344-5', 'reservas@turismoglobal.com');
+
+-- Insertar destinos
+INSERT INTO destinos (ciudad, pais, costo) VALUES
+('Salta', 'Argentina', 35000.00),
+('Santiago', 'Chile', 50000.00),
+('San Pablo', 'Brasil', 60000.00);
+
+-- Insertar ventas
+INSERT INTO ventas (id_cliente, id_destino, fecha, estado) VALUES
+(1, 1, '2025-06-01', 'Activa'),
+(2, 2, '2025-06-01', 'Anulada'),
+(3, 3, '2025-06-02', 'Activa');
+
+-- ===============================
+-- CONSULTAS SQL (SELECT)
+-- ===============================
+
+-- ver ventas que usaron el botón de arrepentimiento
+SELECT 
+    v.id_venta,
+    cl.razon_social,
+    ci.descripcion AS ciudad,
+    v.fecha,
+    v.estado,
+    v.fecha_anulacion
+FROM venta v
+JOIN cliente cl ON v.id_cliente = cl.id_cliente
+JOIN destino d ON v.id_destino = d.id_destino
+JOIN ciudad ci ON d.id_ciudad = ci.id_ciudad
+WHERE v.arrepent = TRUE;
+
+-- contar ventas activas y anuladas
+SELECT 
+    estado,
+    COUNT(*) AS cantidad
+FROM venta
+GROUP BY estado;
+
+-- ver ventas completas con cliente, ciudad, país y estado
+SELECT 
+    v.id_venta,
+    cl.razon_social,
+    ci.descripcion AS ciudad,
+    p.descripcion AS pais,
+    v.fecha,
+    v.estado,
+    v.fecha_anulacion,
+    v.arrepent
+FROM venta v
+JOIN cliente cl ON v.id_cliente = cl.id_cliente
+JOIN destino d ON v.id_destino = d.id_destino
+JOIN ciudad ci ON d.id_ciudad = ci.id_ciudad
+JOIN pais p ON ci.id_pais = p.id_pais;
+
+-- listar destinos con ciudad, país y costo
+SELECT 
+    d.id_destino,
+    ci.descripcion AS ciudad,
+    p.descripcion AS pais,
+    d.costo
+FROM destino d
+JOIN ciudad ci ON d.id_ciudad = ci.id_ciudad
+JOIN pais p ON ci.id_pais = p.id_pais;
+
+-- mostrar todos los clientes con su información de contacto
+SELECT 
+    c.id_cliente,
+    c.razon_social,
+    c.cuit,
+    co.telefono,
+    co.correo
+FROM cliente c
+LEFT JOIN contacto co ON c.id_contacto = co.id_contacto;
