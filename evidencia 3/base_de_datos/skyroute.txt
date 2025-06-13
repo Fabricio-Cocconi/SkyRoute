@@ -54,6 +54,9 @@ CREATE TABLE venta (
     FOREIGN KEY (id_destino) REFERENCES destino(id_destino)
     );
     
+-- para que funcione la base con el código ejecutar esto
+
+ALTER TABLE venta MODIFY fecha DATETIME;
     -- ===============================
 -- DML: INSERTAR DATOS DE EJEMPLO
 -- ===============================
